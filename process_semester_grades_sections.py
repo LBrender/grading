@@ -8,14 +8,12 @@ import math
 # It processes html templates.
 templateLoader = jinja2.FileSystemLoader(searchpath="./")
 templateEnv = jinja2.Environment(loader=templateLoader)
-TEMPLATE_FILE = "templates/semester_report_template.html"
+TEMPLATE_FILE = "templates/semester_report_template_sections.py"
 template = templateEnv.get_template(TEMPLATE_FILE)
 
 # Establish some class-wide variables
 scores_csv = 'scores/semester_scores.csv'
 class_count = {"A": 0, "B": 0, "C": 0, "D": 0, "F": 0, "number_of_students": 0, "score_total": 0, "score_average": 0}
-# OMG you just hardcoded this!?
-available_points = 747
 
 # Open the scores csv, iterate through the rows:
 with open(scores_csv, newline='') as csvfile:
@@ -28,26 +26,37 @@ with open(scores_csv, newline='') as csvfile:
 		student_name = row[0]
 		total_score = 0
 		print(student_name)
-		for points in row[2:]:
-			total_score += int(points)
 
-		percent = round(((total_score / available_points) * 100), 0)
+		midterm_grade = float(row[2])
+
+		writing_assignments = 0
+		for item in [row[3], row[4], row[5], row[6], row[7], row[8], row[9]]:
+			if item == "x":
+				writing_assignments += 1
+		writing_score = round((writing_assignments * 100) / 6, 0)
+
+		paper_score = float(row[12])
+		discussion_score = float(row[13]) * 20
+
+		total_points = round(midterm_grade + writing_score + paper_score + discussion_score, 0)
+		percent = round(total_points / 4, 0)
 		grade = helpers.letter_grade(percent)
 		class_count[grade[0]] += 1
 		class_count["number_of_students"] += 1
 		class_count["score_total"] += percent
 		context = {
-			"available_points": available_points,
-			"letter": grade,
+			"midterm_grade": midterm_grade,
+			"writing_score": writing_score,
+			"writing_assignments": writing_assignments,
+			"paper_score": paper_score,
+			"discussion_score": discussion_score,
+			"total_points": total_points,
 			"percent": percent,
-			"points": total_score,
-			"sections": [],
+			"grade": grade,
 			"student_name": student_name,
 		}
-		for i in range(2, len(assignment_names)+1):
-			context["sections"].append({assignment_names[i-1]: int(row[i])})
 
-		print(student_name + "   " + context["letter"] + "   " + str(context["percent"]))
+		print(student_name + "   " + context["grade"] + "   " + str(context["percent"]))
 
 		# fill in the html with the context
 		sourceHtml = template.render(context=context)
