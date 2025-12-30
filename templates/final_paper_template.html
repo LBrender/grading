@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        table {border: 1px solid black; border-collapse: collapse; width: 100%;}
+        th {border: 1px solid black; border-collapse: collapse; padding: 5px;}
+        td {border: 1px solid black; border-collapse: collapse; padding: 5px;}
+        td.highlight {background-color: aqua;}
+        p { margin-bottom: 0; padding-bottom: 0; } 
+    </style>
+</head>
+<body style="padding: 3rem">
+    <h2>Final Paper</h2>
+    US History 2, Fall 2025, Danielle Bennett
+
+    <h3>Student Name: {{ context["student_name"] }}</h3>
+
+    <p>
+        Question Points (out of 25): {{ context["questions"] }}
+    </p>
+    <p>Breakdown of Paper Score: </p>
+    <table class="table">
+        <thead style="border: 1px solid black">
+            <tr>
+                {% for i in range(1, context["rubric"]|length): %}
+                    <th>
+                        {{ context["rubric"][i]["name"] }}<br>
+                    </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        {% for i in range(1, (context["rubric"][1]|length)-1): %}
+            <tr>
+                {% for n in range(1, context["rubric"]|length): %}
+                    <td class={{ "highlight" if i == context["sections"][n] }}>
+                        {{ context["rubric"][n][i]["description"] }}<br>
+                        ({{ context["rubric"][n][i]["points"] }} points)
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        <tfoot>
+            <tr>
+                <td class="text-end"><strong>Total:</strong> {{ context["paper_score"] }} points</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <h4>Raw Grade: {{context["total_score"]}}/{{ context["rubric"]["available_points"] }} ({{ context["percent"] }}% {{ context["raw_letter"] }})</h4>
+    <h3>Curved Grade: {{ context["curved_score"] }}% {{ context["curved_letter"] }}</h3>
+    {% if context["comments"]: %}
+        <p>Instructor's Comments: {{ context["comments"] }}</p>
+    {% endif %}
+</body>
+</html>

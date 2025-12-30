@@ -17,6 +17,8 @@ pip3 install jinja2
 pip3 install wkhtmltopdf
 ^ This one takes FOREVER and I'm not sure it's necessary. try skipping it and see what happens?
 
+In order to use pdfkit, you need wkhtmltopdf installed, which is kind of a pain. Go here: https://wkhtmltopdf.org/downloads.html, choose the one for mac, download the binary file and then open it. Your laptop's security settings might be a butt about it, but figure it out, it's worth it.
+
 GENERAL
 - When Danielle makes a csv from scratch (for midterm and final papers), she usually does "Link Brender". When she downloads from blackboard, it gives "Brender | Link". This fucks everything up every single time. It's currently set up so the paper ones work one way and the semester grades work the other way. Do not mess with this.
 - There's a print statement in each process script that prints out the name and grade. Leave that in place because it's useful for entering into blackboard right away. Are the total points out of 100? If not, consider printing out the point numbers as well, it can be helpful for entering into blackboard.

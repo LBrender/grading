@@ -54,5 +54,5 @@ def build_rubric(rubric_file, already_counted):
 				score_rubric[counter][integer] = {"description": row[(integer * 2)-1], "points": int(row[integer * 2])}
 			score_rubric["available_points"] += int(row[2])
 			counter += 1
-	print(score_rubric)
+	# print(score_rubric)
 	return score_rubric
